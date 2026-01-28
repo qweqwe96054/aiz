@@ -14,12 +14,12 @@ Workspace = game:GetService("Workspace")
 SoundService = game:GetService("SoundService")
 Debris = game:GetService("Debris")
 
-if LocalPlayer:GetAttribute("SapphireLoaded") then 
+if LocalPlayer:GetAttribute("xicom doors Loaded") then 
 print("防止加载太多闪退已停止加载")
 return
 end
 
-LocalPlayer:SetAttribute("SapphireLoaded", true)
+LocalPlayer:SetAttribute("xicom doors Loaded", true)
 
 notifysound = 4590657391
 
@@ -155,7 +155,7 @@ Connections = {}
 Library:Notify("正在加载 xicom doors | Doors",5)
 
 Window = Library:CreateWindow({
-Title = 'xicom doors❤️',
+Title = 'xicom doors 1.2❤️',
 Footer = "QQ群1070767561",
 Center = true,
 NotifySide = "Right",
@@ -182,7 +182,7 @@ Icon = "house"
 }),
 Player = Window:AddTab({
 Name = "玩家",
-Description = "基础功能", 
+Description = "修改功能", 
 Icon = "user"
 }),
 Exploits = Window:AddTab({
@@ -197,7 +197,7 @@ Icon = "scan-eye"
 }),
 Floor = Window:AddTab({
 Name = "楼层",
-Description = "基于楼层", 
+Description = "相对应的楼层才能使用", 
 Icon = "sparkles"
 }),
 UISettings = Window:AddTab({
@@ -207,7 +207,7 @@ Icon = "settings"
 }),
 Info = Window:AddTab({
 Name = "信息",
-Description = "关于Sapphire的信息", 
+Description = "关于xicom doors的信息", 
 Icon = "info"
 }),
 Addons = Window:AddTab({
@@ -249,7 +249,7 @@ Farm = Tabs.Floor:AddLeftGroupbox("农场")
 SettingsBox = Tabs.UISettings:AddLeftGroupbox('UI','wrench')
 
 Tabs.Homepage:UpdateWarningBox({
-Title = "更新日志：",
+Title = "开发日志：",
 Text = "//Doors//\n<font color=\"rgb(73,230,133)\"> 已更新xicom doors\n更新时间202601028\n</font>",
 IsNormal = true,
 Visible = true,
@@ -283,6 +283,10 @@ end
 })
 
 Info:AddLabel("[<font color=\"rgb(73,230,133)\">快手错误化</font>] 所有者")
+
+Info:AddLabel("[<font color=\"rgb(73,230,133)\">还差一个人</font>] 管理者")
+
+Info:AddLabel("[<font color=\"rgb(73,230,133)\">再次感谢游玩xicom doors</font>] 你")
 
 Movement:AddToggle('SpeedBoost', {
     Text = "移动速度值",
@@ -4530,7 +4534,7 @@ local Lighting = game:GetService("Lighting")
 local RunService = game:GetService("RunService")
 local skyRemovalConnection = nil
 Ambient:AddToggle('AntiFog', {
-    Text = "没有雾",
+    Text = "没修饰符雾",
     Default = false,
 Callback = function(Value)
 if Value then
@@ -4556,7 +4560,7 @@ end
 })
 
 Ambient:AddToggle('AntiLag',{
-     Text = "防卡顿",
+     Text = "防止卡顿",
      Default = false,
 Callback = function(Value)
 if Value then
@@ -4697,7 +4701,7 @@ FOVhandler.cam = workspace.CurrentCamera
 end)
 local View = 70
 Self:AddSlider("FieldofViewAdjust", {
-    Text = "视野滑块",
+    Text = "视野调整",
     Default = 70,
     Min = 70,
     Max = 120,
@@ -4719,7 +4723,7 @@ end
 end
 })
 Self:AddToggle('Fieldofview', {
-    Text = "视野",
+    Text = "增加视野",
     Default = false,
     Callback = function(Value)
 if Value then
@@ -4916,7 +4920,7 @@ end
 })
 
 Effect:AddToggle('AntiVoid', {
-    Text = "无虚空跳脸",
+    Text = "没有虚空跳脸",
     Default = false,
 Callback = function(Value)
 if VoidModule then
@@ -4936,7 +4940,7 @@ end
 
 local batDecorConnection = nil
 Effect:AddToggle('NoBatDecor', {
-    Text = "无蝙蝠装饰",
+    Text = "无糖果修饰符蝙蝠",
     Default = false,
 Callback = function(Value)
 if Value then
@@ -4964,7 +4968,7 @@ end
 })
 
 Effect:AddToggle('NoVignette', {
-    Text = "柜子无暗角",
+    Text = "进入柜子没有暗角",
     Default = false
 })
 local noVignetteLoop = nil
@@ -4992,7 +4996,7 @@ end
 end)
 
 Effect:AddToggle('NoOxygenVignette', {
-    Text = "无缺氧效果",
+    Text = "没有氧气效果",
     Default = false
 })
 local noOxygenVignetteLoop = nil
@@ -5028,7 +5032,7 @@ end
 end)
 
 FloorAnti:AddToggle('AntiSeekObstructions',{
-     Text = "防追逐障碍",
+     Text = "防追逐战掉落的灯",
      Default = false,
 Callback = function(Value)
 for _, v in ipairs(workspace.CurrentRooms:GetDescendants()) do
@@ -5046,7 +5050,7 @@ end
 local FakeSurge = Instance.new("RemoteEvent", ReplicatedStorage)
 FakeSurge.Name = "SurgeRemote"
 FloorAnti:AddToggle('AntiSurge', {
-     Text = "防 Surge",
+     Text = "防怪之 Surge",
      Default = false,
 Callback = function(Value)
 if Value then
@@ -5063,7 +5067,7 @@ if Floor.Value == "Hotel" then
 local noPuzzleDoorsRunning = false
 local noPuzzleDoorsConnection = nil
 FloorAnti:AddToggle('NoPuzzleDoors', {
-Text = "无谜题门",
+Text = "无谜题门FE",
 Default = false,
 Callback = function(Value)
 if Value then
@@ -5106,7 +5110,7 @@ if Floor.Value == "Rooms" then
 teleportToRoomEnabled = false
 teleportToRoomConnection = nil
 FloorAnti:AddToggle('TeleportToNextRoom', {
-    Text = "房间传送",
+    Text = "传送房间",
     Default = false,
 Callback = function(Value)
 teleportToRoomEnabled = Value
@@ -5151,7 +5155,7 @@ end
 if Floor.Value == "Mines" then
 FloorAnti:AddDivider()
 FloorAnti:AddToggle('DeleteFigure', {
-Text = "删除飞哥",
+Text = "删除飞哥FE",
 Default = false
 })
 
@@ -5159,7 +5163,7 @@ local minecartRenameActive = false
 local minecartToggleEnabled = false
 local minecartRoomCheckConnection = nil
 FloorAnti:AddToggle('DeleteMinecart', {
-Text = "删除矿车",
+Text = "删除矿车FE",
 Default = false,
 Callback = function(Value)
 minecartToggleEnabled = Value
@@ -5205,7 +5209,7 @@ if remote then
 remote.Name = name .. " "
 end
 end
-Library:Notify("删除矿车成功", 7)
+Library:Notify("删除矿车FE", 7)
 Library:Notify("触发矿车过场动画后可绕过反作弊", 7)
 Toggles.DeleteMinecart:SetValue(true)
 end
@@ -5273,7 +5277,7 @@ end
 FloorAnti:AddDivider()
 
 FloorAnti:AddToggle('AnticheatBypass',{
-     Text = "绕过反作弊",
+     Text = "绕过反作弊需要梯子",
      Default = false
 })
 Toggles.AnticheatBypass:OnChanged(function(Value)
@@ -5289,7 +5293,7 @@ if LocalPlayer.Character:GetAttribute("Climbing") == true then
 if Toggles.AnticheatBypass.Value then 
 task.wait(0.4)
 LocalPlayer.Character:SetAttribute("Climbing",false)
-Library:Notify("绕过成功，过场动画和Halt会破坏绕过",7)
+Library:Notify("绕过成功在动画中失效",7)
 end
 end
 end)
@@ -5325,7 +5329,7 @@ end)
 table.insert(bridgeConns, conn)
 end
 FloorAnti:AddToggle("ABF", {
-Text = "防止桥坠毁",
+Text = "防止seek桥坠毁",
 Default = false,
 Callback = function(on)
 for _, c in ipairs(bridgeConns) do c:Disconnect() end
@@ -5374,7 +5378,7 @@ end
 })
 
 FloorAnti:AddToggle('AntiSeekFlood', {
-    Text = "防 Seek 洪水",
+    Text = "防怪之  seek大便洪水",
     Default = false,
 Callback = function(Value)
 local SeekSlopRemote = game:GetService("ReplicatedStorage").RemotesFolder:FindFirstChild("SeekSlop")
@@ -5386,7 +5390,7 @@ end
 FloorAnti:AddDivider()
 
 FloorAnti:AddButton({
-Text = "禁用实体",
+Text = "禁用所有尸体",
 DoubleClick = true,
 Risky = true,
 Func = function()
@@ -5430,7 +5434,7 @@ applyMaxSlopeAngle()
 end)
 Other:AddDivider()
 
-if Floor.Value == "Mines" then
+if Floor.Value == "矿井" then
 local SeekPathColor = Color3.new(0, 1, 0)
 local SeekPathThickness = 0.2
 local seekPathLines = {}
@@ -5483,7 +5487,7 @@ seekPathUpdateConnection = nil
 end
 end
 Other:AddToggle("ShowSeekPath", {
-Text = "显示追逐战路径",
+Text = "显示seek追逐战路径",
 Default = false,
 Callback = function(Value)
 if Value then
@@ -5509,7 +5513,7 @@ end
 end
 })
 Other:AddSlider("SeekPathThicknessSlider", {
-Text = "线体厚度",
+Text = "追踪线线体厚度",
 Default = 0.2,
 Min = 0.1,
 Max = 1.0,
@@ -5525,7 +5529,7 @@ end
 end
 
 ModifiersBox:AddToggle('AntiA90', {
-    Text = "防 A90",
+    Text = "防怪之 A90",
     Default = false,
 Callback = function(Value)
 local A90 = Modules:FindFirstChild("A90") or Modules:FindFirstChild("_A90")
@@ -5536,12 +5540,12 @@ end
 })
 
 ModifiersBox:AddToggle('AntiLookman', {
-    Text = "防 Lookman",
+    Text = "防怪之 Lookman",
     Default = false
 })
 
 ModifiersBox:AddToggle('AntiGiggle',{
-     Text = "防 Giggle",
+     Text = "防怪之 Giggle",
      Default = false,
 Callback = function(Value)
 for _, v in ipairs(workspace.CurrentRooms:GetDescendants()) do
@@ -5562,7 +5566,7 @@ end
 end)
 
 ModifiersBox:AddToggle('AntiJam',{
-     Text = "防 Jamming",
+     Text = "防怪之 Jamming",
      Default = false,
 Callback = function(Value)
 if Modifiers and not Modifiers:FindFirstChild("Jammin") then return end
@@ -5590,7 +5594,7 @@ end
 })
 
 ModifiersBox:AddToggle('AntiGloomPile', {
-    Text = "防 Gloom Egg",
+    Text = "防怪之 Gloom Egg",
     Default = false,
 Callback = function(Value)
 for _, v in ipairs(workspace.CurrentRooms:GetDescendants()) do
@@ -5611,7 +5615,7 @@ end
 end))
 
 ModifiersBox:AddToggle('AntiVacuum', {
-    Text = "防 Vacuum",
+    Text = "防怪之 Vacuum",
     Default = false,
 Callback = function(Value)
 for _, v in ipairs(workspace.CurrentRooms:GetDescendants()) do
@@ -5636,7 +5640,7 @@ Library:Notify("你的执行器不支持复制信号", 3)
 return 
 end
 if queue_on_teleport then
-Library:Notify("死亡农场开始工作", 3)
+Library:Notify("死亡农场不好用", 3)
 loadstring(game:HttpGet("https://raw.msdoors.xyz/deathfarm"))()
 end
 end
@@ -5645,7 +5649,7 @@ end
 local knobFarmingActive = false
 local knobFarmingThread = nil
 Farm:AddToggle('KnobFarm', {
-    Text = "旋钮农场",
+    Text = "刷门把手",
     Default = false,
 Callback = function(Value)
 if Value then
@@ -5916,13 +5920,13 @@ end
 if prompt.Parent and prompt.Parent.Name == "GoldPile" and Options.IgnoreList and Options.IgnoreList.Value["金币"] then 
 return 
 end
-if prompt.Name == "ModulePrompt" and prompt.Parent and prompt.Parent.Name == "Candy" and Options.IgnoreList and Options.IgnoreList.Value["糖果"] then
+if prompt.Name == "ModulePrompt" and prompt.Parent and prompt.Parent.Name == "Candy" and Options.IgnoreList and Options.IgnoreList.Value["可以吃的糖果"] then
 return
 end
 if prompt.Parent:GetAttribute("JeffShop") and Options.IgnoreList and Options.IgnoreList.Value["Jeff物品"] then 
 return 
 end
-if prompt.Parent.Parent and prompt.Parent.Parent.Name == "Drops" and Options.IgnoreList and Options.IgnoreList.Value["丢弃物品"] then 
+if prompt.Parent.Parent and prompt.Parent.Parent.Name == "Drops" and Options.IgnoreList and Options.IgnoreList.Value["丢掉物品"] then 
 return 
 end
 if prompt.Parent and prompt.Parent.Name == "Candy" and prompt.Parent:GetAttribute("Tool_CandyID") == "CandyRed" and Options.IgnoreList and Options.IgnoreList.Value["死亡糖果"] then
@@ -6058,7 +6062,7 @@ AutoLibraryCodeConnection:Disconnect()
 AutoLibraryCodeConnection = nil
 end
 
-LocalPlayer:SetAttribute("SapphireLoaded", nil)
+LocalPlayer:SetAttribute("xicom doorsLoaded", nil)
 
 if autoGlitchConnection then
 autoGlitchConnection:Disconnect()
@@ -6231,7 +6235,7 @@ end)
 SettingsBox:AddToggle("ShowCustomCursor", {
 Text = "显示自定义光标主播感觉没啥用",
 Default = Library.IsMobile == true and true or false,
-Tooltip = "切换光标的可见性",
+Tooltip = "切换了光标可见性",
 }):OnChanged(function()
 Library.ShowCustomCursor = Toggles.ShowCustomCursor.Value
 end)
@@ -6307,7 +6311,7 @@ SaveManager:SaveAutoloadConfig()
 
 Tabs.Info:UpdateWarningBox({
 Title = "这里面没脏话了，我改了",
-Text = "［<font color=\"rgb(255,0,0)\">好fake人</font>］B站UID:604520016\n<font color=\"rgb(255,0,0)\">好fake人</font> 一定要加qq1074830601",
+Text = "［<font color=\"rgb(255,0,0)\">好fake人</font>UID:3546713430165720\n<font color=\"rgb(255,0,0)\">好fake人</font> 一定要加qq1074830601",
 IsNormal = true,
 Visible = true,
 LockSize = true,
