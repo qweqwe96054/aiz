@@ -19,7 +19,7 @@ print("防止加载太多闪退已停止加载")
 return
 end
 
-LocalPlayer:SetAttribute("xicom doors Loaded", true)
+LocalPlayer:SetAttribute("SapphireLoaded", true)
 
 notifysound = 4590657391
 
@@ -155,7 +155,7 @@ Connections = {}
 Library:Notify("正在加载 xicom doors | Doors",5)
 
 Window = Library:CreateWindow({
-Title = 'xicom doors 1.2❤️',
+Title = 'xicom doors❤️',
 Footer = "QQ群1070767561",
 Center = true,
 NotifySide = "Right",
