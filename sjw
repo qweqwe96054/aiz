@@ -1,0 +1,859 @@
+-- Wind UI 手机控制面板 (完整版)
+
+-- 加载Wind UI库
+local WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Guo61/Cat-/refs/heads/main/main.lua"))()
+
+-- 显示欢迎弹窗
+local Confirmed = false
+local Cancelled = false
+
+WindUI:Popup({
+    Title = "xicom Pro",
+    Icon = "settings",
+    IconThemed = true,
+    Content = "请选择操作",
+    Buttons = {
+        {
+            Title = "取消",
+            Icon = "x",
+            Callback = function() 
+                Cancelled = true
+                return true
+            end,
+            Variant = "Secondary",
+        },
+        {
+            Title = "进入xicom Pro",
+            Icon = "arrow-right",
+            Callback = function() 
+                Confirmed = true
+                return true
+            end,
+            Variant = "Primary",
+        }
+    }
+})
+
+repeat task.wait() until Confirmed or Cancelled
+
+if Cancelled then
+    WindUI:Notify({Title = "操作已取消", Content = "脚本执行已终止", Duration = 2})
+    return
+end
+
+-- 创建主窗口
+local Window = WindUI:CreateWindow({
+    Title = "xicom Pro",
+    Icon = "smartphone",
+    IconThemed = true,
+    Author = "快手错误化",
+    Folder = "MobileControl",
+    Size = UDim2.fromOffset(460, 395),
+    Transparent = false,
+    Theme = "Dark",
+    User = { Enabled = false },
+    SideBarWidth = 150,
+    ScrollBarEnabled = true,
+    Background = "rbxassetid://78974218545947",
+})
+
+Window:SetBackgroundImageTransparency(0.3)
+
+Window:Tag({
+    Title = "V1.0",  -- 版本号更新
+    Color = Color3.fromHex("#0091FF")
+})
+
+-- 创建所有标签页
+local Tabs = {
+    Notice = Window:Tab({ Title = "公告", Icon = "megaphone" }),
+    General = Window:Tab({ Title = "通用", Icon = "settings" }),
+    ScriptCenter = Window:Tab({ Title = "脚本中心", Icon = "code" }),
+    Doors = Window:Tab({ Title = "Doors脚本", Icon = "door" }),
+    Battlefield = Window:Tab({ Title = "最强战场", Icon = "swords" }),
+    StealBrain = Window:Tab({ Title = "偷走脑红", Icon = "brain" }),
+    Garden = Window:Tab({ Title = "种植花园", Icon = "flower" }),
+}
+
+Window:SelectTab(1)
+
+-- ========== 公告标签页 ==========
+Tabs.Notice:Paragraph({
+    Title = "使用须知",
+    Desc = "请仔细阅读以下公告",
+    Image = "megaphone",
+    ImageSize = 40,
+})
+
+Tabs.Notice:Button({
+    Title = "第1条:本脚本公益",
+    Desc = "本脚本完全免费，仅供学习交流使用",
+    Callback = function()
+        WindUI:Notify({
+            Title = "公益声明",
+            Content = "本脚本完全免费，禁止用于商业用途",
+            Duration = 3
+        })
+    end
+})
+
+Tabs.Notice:Button({
+    Title = "第2条:倒卖死你妈！",
+    Desc = "严禁倒卖本脚本，违者必究",
+    Callback = function()
+        WindUI:Notify({
+            Title = "警告",
+            Content = "严禁倒卖本脚本，违者死妈！",
+            Duration = 3
+        })
+    end
+})
+
+Tabs.Notice:Button({
+    Title = "第3条:复制QQ号1076643480",
+    Desc = "点击复制QQ号",
+    Callback = function()
+        setclipboard("1076643480")
+        WindUI:Notify({
+            Title = "复制成功",
+            Content = "已复制QQ号：1076643480",
+            Duration = 3
+        })
+    end
+})
+
+-- ========== 通用标签页 ==========
+-- 修复移动速度设置
+local currentWalkSpeed = 16
+Tabs.General:Slider({
+    Title = "移动速度",
+    Value = {
+        Min = 16,
+        Max = 200,
+        Default = 16,
+    },
+    Increment = 1,
+    Callback = function(value)
+        currentWalkSpeed = value
+        local player = game.Players.LocalPlayer
+        if player.Character and player.Character:FindFirstChild("Humanoid") then
+            player.Character.Humanoid.WalkSpeed = value
+            WindUI:Notify({
+                Title = "移动速度",
+                Content = "移动速度已设置为: " .. tostring(value),
+                Duration = 2
+            })
+        end
+    end
+})
+
+-- 修复跳跃高度设置
+local currentJumpPower = 50
+Tabs.General:Slider({
+    Title = "跳跃高度",
+    Value = {
+        Min = 50,
+        Max = 200,
+        Default = 50,
+    },
+    Increment = 1,
+    Callback = function(value)
+        currentJumpPower = value
+        local player = game.Players.LocalPlayer
+        if player.Character and player.Character:FindFirstChild("Humanoid") then
+            player.Character.Humanoid.JumpPower = value
+            WindUI:Notify({
+                Title = "跳跃高度",
+                Content = "跳跃高度已设置为: " .. tostring(value),
+                Duration = 2
+            })
+        end
+    end
+})
+
+-- 修复重力设置
+local currentGravity = 196.2
+Tabs.General:Slider({
+    Title = "重力设置",
+    Value = {
+        Min = 0,
+        Max = 500,
+        Default = 196.2,
+    },
+    Increment = 1,
+    Callback = function(value)
+        currentGravity = value
+        game.Workspace.Gravity = value
+        WindUI:Notify({
+            Title = "重力设置",
+            Content = "重力已设置为: " .. tostring(value),
+            Duration = 2
+        })
+    end
+})
+
+-- 添加神奇功能
+local magicalEnabled = false
+local magicalConnection
+local swearWords = {
+    "草泥马！",
+    "傻逼东西！", 
+    "你妈死了！",
+    "狗日的！",
+    "操你大爷！",
+    "废物一个！",
+    "去死吧！",
+    "垃圾玩意儿！",
+    "你算什么东西！",
+    "吃屎去吧！",
+    "操！",
+    "日你妈！",
+    "滚你妈的！",
+    "畜牲不如！",
+    "王八蛋！"
+}
+
+local function startSwearing()
+    if magicalConnection then
+        magicalConnection:Disconnect()
+    end
+    
+    magicalConnection = game:GetService("RunService").Heartbeat:Connect(function()
+        if magicalEnabled then
+            -- 随机选择一个脏话
+            local randomSwear = swearWords[math.random(1, #swearWords)]
+            
+            -- 在聊天中发送
+            local success, err = pcall(function()
+                game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(randomSwear, "All")
+            end)
+            
+            -- 如果上面失败，尝试另一种方法
+            if not success then
+                pcall(function()
+                    game.Players.LocalPlayer:Chat(randomSwear)
+                end)
+            end
+            
+            -- 随机等待0.5-2秒
+            wait(math.random(0.5, 2))
+        else
+            magicalConnection:Disconnect()
+        end
+    end)
+end
+
+Tabs.General:Toggle({
+    Title = "神奇模式",
+    Desc = "开启后会随机骂脏话",
+    Value = false,
+    Callback = function(state)
+        magicalEnabled = state
+        if state then
+            WindUI:Notify({
+                Title = "神奇模式",
+                Content = "神奇模式已开启，准备开始骂人！",
+                Duration = 3
+            })
+            wait(1)
+            startSwearing()
+        else
+            if magicalConnection then
+                magicalConnection:Disconnect()
+            end
+            WindUI:Notify({
+                Title = "神奇模式",
+                Content = "神奇模式已关闭",
+                Duration = 3
+            })
+        end
+    end
+})
+
+-- 添加夜视功能
+local nightVisionEnabled = false
+local originalLightingSettings = {}
+local nightVisionConnection
+
+local function enableNightVision()
+    -- 保存原始设置
+    originalLightingSettings = {
+        Ambient = game.Lighting.Ambient,
+        Brightness = game.Lighting.Brightness,
+        GlobalShadows = game.Lighting.GlobalShadows,
+        OutdoorAmbient = game.Lighting.OutdoorAmbient
+    }
+    
+    -- 设置夜视效果
+    game.Lighting.Ambient = Color3.fromRGB(200, 200, 200)
+    game.Lighting.Brightness = 2
+    game.Lighting.GlobalShadows = false
+    game.Lighting.OutdoorAmbient = Color3.fromRGB(128, 128, 128)
+    
+    -- 添加轻微的蓝绿色调
+    local colorCorrection = Instance.new("ColorCorrectionEffect")
+    colorCorrection.Name = "WindUI_NightVision"
+    colorCorrection.Brightness = 0.1
+    colorCorrection.Contrast = 0.2
+    colorCorrection.Saturation = 0.5
+    colorCorrection.TintColor = Color3.fromRGB(100, 255, 200)
+    colorCorrection.Enabled = true
+    colorCorrection.Parent = game.Lighting
+    
+    -- 添加轻微的光晕效果
+    local bloom = Instance.new("BloomEffect")
+    bloom.Name = "WindUI_NightVisionBloom"
+    bloom.Intensity = 0.3
+    bloom.Size = 24
+    bloom.Threshold = 0.8
+    bloom.Enabled = true
+    bloom.Parent = game.Lighting
+end
+
+local function disableNightVision()
+    -- 恢复原始设置
+    if originalLightingSettings.Ambient then
+        game.Lighting.Ambient = originalLightingSettings.Ambient
+        game.Lighting.Brightness = originalLightingSettings.Brightness
+        game.Lighting.GlobalShadows = originalLightingSettings.GlobalShadows
+        game.Lighting.OutdoorAmbient = originalLightingSettings.OutdoorAmbient
+    end
+    
+    -- 移除效果
+    for _, effect in pairs(game.Lighting:GetChildren()) do
+        if effect.Name == "WindUI_NightVision" or effect.Name == "WindUI_NightVisionBloom" then
+            effect:Destroy()
+        end
+    end
+end
+
+Tabs.General:Toggle({
+    Title = "夜视模式",
+    Desc = "增强黑暗环境的可视度",
+    Value = false,
+    Callback = function(state)
+        nightVisionEnabled = state
+        if state then
+            enableNightVision()
+            
+            if nightVisionConnection then
+                nightVisionConnection:Disconnect()
+            end
+            
+            nightVisionConnection = game:GetService("RunService").Heartbeat:Connect(function()
+                if nightVisionEnabled then
+                    game.Lighting.Ambient = Color3.fromRGB(200, 200, 200)
+                    game.Lighting.Brightness = 2
+                    game.Lighting.GlobalShadows = false
+                    
+                    if not game.Lighting:FindFirstChild("WindUI_NightVision") then
+                        local colorCorrection = Instance.new("ColorCorrectionEffect")
+                        colorCorrection.Name = "WindUI_NightVision"
+                        colorCorrection.Brightness = 0.1
+                        colorCorrection.Contrast = 0.2
+                        colorCorrection.Saturation = 0.5
+                        colorCorrection.TintColor = Color3.fromRGB(100, 255, 200)
+                        colorCorrection.Enabled = true
+                        colorCorrection.Parent = game.Lighting
+                    end
+                    
+                    if not game.Lighting:FindFirstChild("WindUI_NightVisionBloom") then
+                        local bloom = Instance.new("BloomEffect")
+                        bloom.Name = "WindUI_NightVisionBloom"
+                        bloom.Intensity = 0.3
+                        bloom.Size = 24
+                        bloom.Threshold = 0.8
+                        bloom.Enabled = true
+                        bloom.Parent = game.Lighting
+                    end
+                else
+                    if nightVisionConnection then
+                        nightVisionConnection:Disconnect()
+                    end
+                end
+            end)
+            
+            WindUI:Notify({
+                Title = "夜视模式",
+                Content = "夜视功能已启用",
+                Duration = 3
+            })
+        else
+            if nightVisionConnection then
+                nightVisionConnection:Disconnect()
+            end
+            disableNightVision()
+            
+            WindUI:Notify({
+                Title = "夜视模式",
+                Content = "夜视功能已关闭",
+                Duration = 3
+            })
+        end
+    end
+})
+
+-- 添加简单的高亮玩家功能
+local highlightEnabled = false
+local highlightObjects = {}
+
+Tabs.General:Toggle({
+    Title = "高亮玩家",
+    Desc = "高亮显示所有玩家",
+    Value = false,
+    Callback = function(state)
+        highlightEnabled = state
+        
+        for _, highlight in pairs(highlightObjects) do
+            if highlight and highlight.Parent then
+                highlight:Destroy()
+            end
+        end
+        highlightObjects = {}
+        
+        if state then
+            for _, player in pairs(game.Players:GetPlayers()) do
+                if player.Character then
+                    local highlight = Instance.new("Highlight")
+                    highlight.Name = "WindUI_Highlight"
+                    highlight.Adornee = player.Character
+                    
+                    if player == game.Players.LocalPlayer then
+                        highlight.FillColor = Color3.fromRGB(0, 255, 0)
+                        highlight.OutlineColor = Color3.fromRGB(0, 200, 0)
+                    else
+                        highlight.FillColor = Color3.fromRGB(255, 0, 0)
+                        highlight.OutlineColor = Color3.fromRGB(200, 0, 0)
+                    end
+                    
+                    highlight.FillTransparency = 0.3
+                    highlight.OutlineTransparency = 0
+                    highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+                    highlight.Parent = player.Character
+                    
+                    table.insert(highlightObjects, highlight)
+                end
+            end
+            
+            game.Players.PlayerAdded:Connect(function(player)
+                if highlightEnabled then
+                    player.CharacterAdded:Connect(function(character)
+                        wait(1)
+                        
+                        local highlight = Instance.new("Highlight")
+                        highlight.Name = "WindUI_Highlight"
+                        highlight.Adornee = character
+                        highlight.FillColor = Color3.fromRGB(255, 0, 0)
+                        highlight.OutlineColor = Color3.fromRGB(200, 0, 0)
+                        highlight.FillTransparency = 0.3
+                        highlight.OutlineTransparency = 0
+                        highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+                        highlight.Parent = character
+                        
+                        table.insert(highlightObjects, highlight)
+                    end)
+                end
+            end)
+            
+            local localPlayer = game.Players.LocalPlayer
+            localPlayer.CharacterAdded:Connect(function(character)
+                if highlightEnabled then
+                    wait(1)
+                    
+                    for i, highlight in pairs(highlightObjects) do
+                        if highlight and highlight.Parent == character then
+                            highlight:Destroy()
+                            table.remove(highlightObjects, i)
+                            break
+                        end
+                    end
+                    
+                    local highlight = Instance.new("Highlight")
+                    highlight.Name = "WindUI_Highlight"
+                    highlight.Adornee = character
+                    highlight.FillColor = Color3.fromRGB(0, 255, 0)
+                    highlight.OutlineColor = Color3.fromRGB(0, 200, 0)
+                    highlight.FillTransparency = 0.3
+                    highlight.OutlineTransparency = 0
+                    highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+                    highlight.Parent = character
+                    
+                    table.insert(highlightObjects, highlight)
+                end
+            end)
+            
+            WindUI:Notify({
+                Title = "高亮玩家",
+                Content = "已高亮显示所有玩家",
+                Duration = 3
+            })
+        else
+            WindUI:Notify({
+                Title = "高亮玩家",
+                Content = "已关闭高亮显示",
+                Duration = 3
+            })
+        end
+    end
+})
+
+-- 添加重置按钮
+Tabs.General:Button({
+    Title = "重置所有设置",
+    Desc = "恢复默认设置值",
+    Callback = function()
+        currentWalkSpeed = 16
+        local player = game.Players.LocalPlayer
+        if player.Character and player.Character:FindFirstChild("Humanoid") then
+            player.Character.Humanoid.WalkSpeed = 16
+        end
+        
+        currentJumpPower = 50
+        if player.Character and player.Character:FindFirstChild("Humanoid") then
+            player.Character.Humanoid.JumpPower = 50
+        end
+        
+        currentGravity = 196.2
+        game.Workspace.Gravity = 196.2
+        
+        if magicalEnabled then
+            magicalEnabled = false
+            if magicalConnection then
+                magicalConnection:Disconnect()
+            end
+        end
+        
+        if nightVisionEnabled then
+            nightVisionEnabled = false
+            if nightVisionConnection then
+                nightVisionConnection:Disconnect()
+            end
+            disableNightVision()
+        end
+        
+        if highlightEnabled then
+            highlightEnabled = false
+            for _, highlight in pairs(highlightObjects) do
+                if highlight and highlight.Parent then
+                    highlight:Destroy()
+                end
+            end
+            highlightObjects = {}
+        end
+        
+        WindUI:Notify({
+            Title = "重置成功",
+            Content = "所有设置已恢复为默认值",
+            Duration = 3
+        })
+    end
+})
+
+-- 脚本飞行
+local flightEnabled = false
+Tabs.General:Toggle({
+    Title = "脚本飞行",
+    Value = false,
+    Callback = function(state)
+        flightEnabled = state
+        if state then
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source", true))()
+            WindUI:Notify({
+                Title = "脚本飞行",
+                Content = "正在加载飞行功能...",
+                Duration = 3
+            })
+            wait(1)
+            game:GetService("Players").LocalPlayer.Chatted:Fire("/fly")
+        else
+            if flightEnabled then
+                game:GetService("Players").LocalPlayer.Chatted:Fire("/fly")
+            end
+            WindUI:Notify({
+                Title = "脚本飞行",
+                Content = "飞行功能已关闭",
+                Duration = 3
+            })
+        end
+    end
+})
+
+-- 无限跳跃
+local infiniteJumpEnabled = false
+Tabs.General:Toggle({
+    Title = "无限跳跃",
+    Value = false,
+    Callback = function(state)
+        infiniteJumpEnabled = state
+        if state then
+            loadstring(game:HttpGet("https://pastebin.com/raw/V5PQy3y0", true))()
+        end
+    end
+})
+
+-- 穿墙模式
+local noclipActive = false
+local noclipConnection
+Tabs.General:Toggle({
+    Title = "穿墙模式",
+    Value = false,
+    Callback = function(state)
+        noclipActive = state
+        if state then
+            if noclipConnection then
+                noclipConnection:Disconnect()
+            end
+            
+            noclipConnection = game:GetService("RunService").Stepped:Connect(function()
+                if noclipActive then
+                    local character = game.Players.LocalPlayer.Character
+                    if character then
+                        for _, part in pairs(character:GetDescendants()) do
+                            if part:IsA("BasePart") then
+                                part.CanCollide = false
+                            end
+                        end
+                    end
+                else
+                    noclipConnection:Disconnect()
+                end
+            end)
+            
+            WindUI:Notify({
+                Title = "穿墙模式",
+                Content = "穿墙模式已启用",
+                Duration = 3
+            })
+        else
+            if noclipConnection then
+                noclipConnection:Disconnect()
+            end
+            WindUI:Notify({
+                Title = "穿墙模式",
+                Content = "穿墙模式已关闭",
+                Duration = 3
+            })
+        end
+    end
+})
+
+-- ========== 脚本中心标签页 ==========
+Tabs.ScriptCenter:Paragraph({
+    Title = "脚本中心",
+    Desc = "选择要加载的脚本中心",
+    Image = "code",
+    ImageSize = 40,
+})
+
+Tabs.ScriptCenter:Button({
+    Title = "BS脚本中心",
+    Desc = "功能丰富的脚本集合",
+    Callback = function()
+        WindUI:Notify({ 
+            Title = "脚本加载", 
+            Content = "正在加载BS脚本中心...",
+            Duration = 3 
+        })
+        loadstring(game:HttpGet("https://gitee.com/BS_script/script/raw/master/BS_Script.Luau"))()
+    end
+})
+
+Tabs.ScriptCenter:Button({
+    Title = "LS脚本中心",
+    Desc = "多功能脚本合集",
+    Callback = function()
+        WindUI:Notify({ 
+            Title = "脚本加载", 
+            Content = "正在加载LS脚本中心...",
+            Duration = 3 
+        })
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/NOODLES65977/LS_Hub/refs/heads/main/LS_Hubbro/BY%3BTY/AXIN/LS.lua"))()
+    end
+})
+
+Tabs.ScriptCenter:Button({
+    Title = "青风脚本",
+    Desc = "青风开发的脚本中心",
+    Callback = function()
+        WindUI:Notify({ 
+            Title = "脚本加载", 
+            Content = "正在加载青风脚本...",
+            Duration = 3 
+        })
+        loadstring(game:HttpGet(utf8.char((function() 
+            return table.unpack({104,116,116,112,115,58,47,47,112,97,115,116,101,98,105,110,46,99,111,109,47,114,97,119,47,116,53,87,75,53,72,48,72})
+        end)())))()
+    end
+})
+
+Tabs.ScriptCenter:Button({
+    Title = "Xi Pro",
+    Desc = "Xi Pro高级脚本",
+    Callback = function()
+        WindUI:Notify({ 
+            Title = "脚本加载", 
+            Content = "正在加载Xi Pro脚本...",
+            Duration = 3 
+        })
+        getfenv().ADittoKey = "傻逼神仇脚本，这就是你的50元脚本🤡"
+        loadstring(request({Url = "https://raw.githubusercontent.com/Zer0neK/SB-Xi-pro/refs/heads/main/SBXiPro.lua"}).Body)()
+    end
+})
+
+-- ========== Doors标签页 ==========
+Tabs.Doors:Paragraph({
+    Title = "Doors脚本",
+    Desc = "Doors游戏专用脚本",
+    Image = "door",
+    ImageSize = 40,
+})
+
+Tabs.Doors:Button({
+    Title = "MSP解卡",
+    Desc = "解决Doors游戏卡顿问题",
+    Callback = function()
+        WindUI:Notify({ 
+            Title = "Doors脚本", 
+            Content = "正在加载MSP解卡脚本...",
+            Duration = 3 
+        })
+        loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/002c19202c9946e6047b0c6e0ad51f84.lua"))()
+    end
+})
+
+Tabs.Doors:Button({
+    Title = "Sapphire脚本",
+    Desc = "Sapphire Doors脚本",
+    Callback = function()
+        WindUI:Notify({ 
+            Title = "Doors脚本", 
+            Content = "正在加载Sapphire脚本...",
+            Duration = 3 
+        })
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/XxxStellatexxX/Sapphire-is-the-best/refs/heads/main/Script'))()
+    end
+})
+
+-- ========== 最强战场标签页 ==========
+Tabs.Battlefield:Paragraph({
+    Title = "最强战场",
+    Desc = "最强战场游戏专用脚本",
+    Image = "swords",
+    ImageSize = 40,
+})
+
+Tabs.Battlefield:Button({
+    Title = "Phantasm脚本",
+    Desc = "推荐：最强战场游戏专用",
+    Callback = function()
+        WindUI:Notify({ 
+            Title = "最强战场", 
+            Content = "正在加载Phantasm脚本...",
+            Duration = 3 
+        })
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/ke9460394-dot/ugik/refs/heads/main/phantasm.lua"))()
+    end
+})
+
+-- ========== 偷走脑红标签页 ==========
+Tabs.StealBrain:Paragraph({
+    Title = "偷走脑红",
+    Desc = "偷走脑红游戏专用脚本",
+    Image = "brain",
+    ImageSize = 40,
+})
+
+Tabs.StealBrain:Button({
+    Title = "作者推荐脚本",
+    Desc = "作者强烈推荐的偷走脑红脚本",
+    Callback = function()
+        WindUI:Notify({ 
+            Title = "偷走脑红", 
+            Content = "正在加载作者推荐脚本...",
+            Duration = 3 
+        })
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/A0WTGFjaGecc2k42wP0PZAbQphqh/Contact/refs/heads/main/OrzlxZ44HubOwnKQenGRSVztS5ndNb.lua", true))()
+    end
+})
+
+Tabs.StealBrain:Button({
+    Title = "抗打击脚本",
+    Desc = "不知道什么名字的防打击脚本",
+    Callback = function()
+        WindUI:Notify({ 
+            Title = "偷走脑红", 
+            Content = "正在加载抗打击脚本...",
+            Duration = 3 
+        })
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/iw929wiwiw/KenGerHub/refs/heads/main/Anti%20Hit"))()
+    end
+})
+
+-- ========== 种植花园标签页 ==========
+Tabs.Garden:Paragraph({
+    Title = "种植花园",
+    Desc = "种植花园游戏专用脚本",
+    Image = "flower",
+    ImageSize = 40,
+    Thumbnail = "https://cdn-icons-png.flaticon.com/512/4207/4207245.png",
+    ThumbnailSize = 90
+})
+
+-- 第1个脚本：作者最推荐（需要解卡）
+Tabs.Garden:Button({
+    Title = "作者最推荐（需要解卡）",
+    Desc = "功能强大但需要先解卡",
+    Callback = function()
+        WindUI:Notify({ 
+            Title = "种植花园", 
+            Content = "正在加载No-Lag HUB...请确保已解卡",
+            Duration = 4
+        })
+        loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/NoLag-id/No-Lag-HUB/refs/heads/main/Loader/LoaderV1.lua"))()
+    end
+})
+
+-- 第2个脚本：无需解卡（功能稀少）
+Tabs.Garden:Button({
+    Title = "无需解卡（功能稀少）",
+    Desc = "无需解卡但功能较少",
+    Callback = function()
+        WindUI:Notify({ 
+            Title = "种植花园", 
+            Content = "正在加载Linnibeta脚本...",
+            Duration = 3
+        })
+        loadstring(request({Url="https://raw.githubusercontent.com/VG-1/-/refs/heads/main/Linnibeta种植花园Money.lua"}).Body)()
+    end
+})
+
+Tabs.Garden:Separator({
+    Title = "使用说明"
+})
+
+Tabs.Garden:Paragraph({
+    Title = "注意事项",
+    Desc = "1. 第一个脚本功能强大但需要先解卡\n2. 第二个脚本无需解卡但功能较少\n3. 根据自己需求选择",
+    Image = "alert-circle",
+    ImageSize = 30
+})
+
+-- 窗口关闭回调
+Window:OnClose(function()
+    print("手机控制面板已关闭")
+    
+    if magicalEnabled then
+        magicalEnabled = false
+        if magicalConnection then
+            magicalConnection:Disconnect()
+        end
+    end
+    
+    if nightVisionEnabled then
+        nightVisionEnabled = false
+        if nightVisionConnection then
+            nightVisionConnection:Disconnect()
+        end
+        disableNightVision()
+    end
+end)
